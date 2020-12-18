@@ -46,3 +46,7 @@ def get_new_session():
     """
     session = session_factory()
     return session
+
+
+if __name__ == "__main__":
+    pass

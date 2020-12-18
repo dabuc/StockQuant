@@ -226,5 +226,6 @@ $RECYCLE.BIN/
 .flake8
 
 test.py
+analysis.py
 tmp.sql
 conf

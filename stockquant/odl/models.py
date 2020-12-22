@@ -220,3 +220,43 @@ class TS_Adj_Factor(Base):
     ts_code = Column("ts_code", String(10), nullable=False)
     trade_date = Column("trade_date", Date, nullable=False)
     adj_factor = Column("adj_factor", Float, nullable=False)
+
+
+class TS_Daily_Base:
+    """
+    日线行情数据
+    """
+
+    id = Column("id", Integer, primary_key=True)
+    ts_code = Column("ts_code", String(10), nullable=False)  # 股票代码
+    trade_date = Column("trade_date", Date, nullable=False)  # 交易日期
+    open = Column("open", Numeric(12, 4), nullable=False)  # 开盘价
+    high = Column("high", Numeric(12, 4), nullable=False)  # 最高价
+    low = Column("low", Numeric(12, 4), nullable=False)  # 最低价
+    close = Column("close", Numeric(12, 4), nullable=False)  # 收盘价
+    pre_close = Column("pre_close", Numeric(12, 4), nullable=False)  # 昨收价
+    change = Column("change", Numeric(12, 4))  # 涨跌额
+    pct_chg = Column("pct_chg", Numeric(12, 4))  # 涨跌幅
+    vol = Column("vol", Numeric(23, 4))  # 成交量 （手）
+    amount = Column("amount", Numeric(23, 4))  # 成交额 （千元）
+    __table_args__ = (UniqueConstraint("ts_code", "trade_date", name="UDX_CODE_DATE"),)
+
+
+class TS_Daily(TS_Daily_Base, Base):
+    """
+    日线行情数据
+    """
+
+    __tablename__ = "odl_ts_daily"
+
+
+# class TS_Daily_Test(Base):
+#     """
+#     日线行情数据
+#     """
+
+#     __tablename__ = "测试表"
+
+#     id = Column("id", Integer, primary_key=True)
+#     股票代码 = Column("股票代码", String(10), nullable=False)  # 股票代码
+#     交易日期 = Column("交易日期", Date, nullable=False)  # 交易日期

@@ -1,5 +1,5 @@
 import click
-from stockquant.odl.tushare import ts_trade_cal
+from stockquant.odl.tushare import daily, ts_trade_cal
 from stockquant.odl.tushare import adj_factor
 
 
@@ -19,10 +19,9 @@ def create_cal_date():
 
 
 @cli.command()
-@click.option('--reset', type=click.BOOL, default=False, help='是否重置任务列表，默认否')
+@click.option("--reset", type=click.BOOL, default=False, help="是否重置任务列表，默认否")
 def update_adj_factor(reset):
-    """更新复权因子
-    """
+    """更新复权因子"""
     click.confirm("正在更新复权因子，是否继续？", abort=True)
 
     if reset:
@@ -30,6 +29,19 @@ def update_adj_factor(reset):
 
     adj_factor.get_adj_factor()
     click.echo("复权因子更新完成。")
+
+
+@cli.command()
+@click.option("--reset", type=click.BOOL, default=False, help="是否重置任务列表，默认否")
+def update_daily(reset):
+    """更新日线行情"""
+    click.confirm("正在更新日线行情，是否继续？", abort=True)
+
+    if reset:
+        daily.update_task()
+
+    daily.get_daily()
+    click.echo("日线行情更新完成。")
 
 
 def main():

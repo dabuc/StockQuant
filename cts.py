@@ -1,6 +1,5 @@
 import click
-from stockquant.odl.tushare import daily, ts_trade_cal
-from stockquant.odl.tushare import adj_factor
+from stockquant.odl.tushare import daily, ts_trade_cal, daily_basic, adj_factor
 
 
 @click.group()
@@ -32,16 +31,22 @@ def update_adj_factor(reset):
 
 
 @cli.command()
-@click.option("--reset", type=click.BOOL, default=False, help="是否重置任务列表，默认否")
-def update_daily(reset):
+def update_daily():
     """更新日线行情"""
     click.confirm("正在更新日线行情，是否继续？", abort=True)
 
-    if reset:
-        daily.update_task()
-
+    daily.update_task()
     daily.get_daily()
     click.echo("日线行情更新完成。")
+
+
+@cli.command()
+def update_daily_basic():
+    """按日期更新每日指标"""
+    click.confirm("正在更新每日指标，是否继续？", abort=True)
+    daily_basic.update_task()
+    daily_basic.update_daily_basic()
+    click.echo("每日指标更新完成。")
 
 
 def main():

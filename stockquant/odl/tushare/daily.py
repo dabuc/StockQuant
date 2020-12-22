@@ -2,17 +2,17 @@
 """
 日线行情
 """
+from stockquant.util.models import TaskTable
 from stockquant.util import logger
-from stockquant.odl.models import TS_Daily
+from stockquant.odl.models import TS_Daily, TS_TradeCal
 from stockquant.settings import CQ_Config
 from stockquant.odl.tushare.util import extract_data
 from stockquant.util.stringhelper import TaskEnum
-from stockquant.util.taskmanage import create_ts_cal_task
 import tushare as ts
 from dateutil.parser import parse
-from sqlalchemy import String
-from stockquant.util.database import engine
-
+from sqlalchemy import String, distinct, and_
+from stockquant.util.database import engine, session_scope
+from datetime import datetime as dtime
 
 _logger = logger.Logger(__name__).get_log()
 
@@ -21,7 +21,39 @@ def update_task():
     """
     更新任务列表
     """
-    create_ts_cal_task(TaskEnum.TS日线行情)
+
+    # 首先删除历史任务
+    TaskTable.del_with_task(TaskEnum.TS日线行情)
+
+    with session_scope() as sm:
+        cte1 = (
+            sm.query(distinct(TS_TradeCal.date).label("date"))
+            .filter(and_(TS_TradeCal.is_open == True, TS_TradeCal.date <= dtime.now().date()))  # noqa
+            .cte("cte1")
+        )
+
+        cte2 = sm.query(distinct(TS_Daily.trade_date).label("trade_date")).cte("cte2")
+
+        query = (
+            sm.query(cte1.c.date)
+            .join(cte2, cte1.c.date == cte2.c.trade_date, isouter=True)
+            .filter(cte2.c.trade_date == None)  # noqa
+        )
+        trade_dates = query.all()
+
+        tasklist = []
+        for c in trade_dates:
+            tasktable = TaskTable(
+                task=TaskEnum.TS日线行情.value,
+                task_name=TaskEnum.TS日线行情.name,
+                ts_code="按日期更新",
+                bs_code="按日期更新",
+                begin_date=c.date,
+                end_date=c.date,
+            )
+            tasklist.append(tasktable)
+        sm.bulk_save_objects(tasklist)
+    _logger.info("生成{}条任务记录".format(len(trade_dates)))
 
 
 def get_daily():

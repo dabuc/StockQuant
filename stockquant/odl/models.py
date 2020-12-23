@@ -13,6 +13,7 @@ from sqlalchemy import (
 )
 from datetime import datetime as dtime
 from stockquant.util.database import Base
+from sqlalchemy.ext.declarative import declared_attr
 
 
 class BS_Stock_Basic(Base):
@@ -35,7 +36,6 @@ class BS_Daily_Base:
     """
     BS日线历史行情数据基类
     """
-
     id = Column("id", Integer, primary_key=True)
     date = Column("date", Date, nullable=False)  # 交易所行情日期
     code = Column("code", String(10), nullable=False)  # BS证券代码 格式：sh.600000。sh：上海，sz：深圳
@@ -55,7 +55,10 @@ class BS_Daily_Base:
     pcfNcfTTM = Column("pcfNcfTTM", Numeric(18, 6))  # 滚动市现率	精度：小数点后6位
     pbMRQ = Column("pbMRQ", Numeric(18, 6))  # 市净率	精度：小数点后6位
     isST = Column("isST", Boolean)  # 是否ST	1是，0否
-    __table_args__ = (UniqueConstraint("code", "date", name="UDX_CODE_DATE"),)
+
+    @declared_attr
+    def __table_args__(cls):
+        return (UniqueConstraint("code", "date", name=f"UDX_CODE_DATE_{cls.__tablename__.upper()}"),)
 
 
 def default_t_date(context):
@@ -123,12 +126,18 @@ class BS_15m_Base:
     adjustflag = Column("adjustflag", String(1))
 
 
+class BS_Daily(BS_Daily_Base, Base):
+    """
+    日线历史行情数据
+    """
+    __tablename__ = "odl_bs_daily"
+
+
 # ------后复权------------
 class BS_Daily_hfq(BS_Daily_Base, Base):
     """
     后复权-日线历史行情数据
     """
-
     __tablename__ = "odl_bs_daily_hfq"
 
 

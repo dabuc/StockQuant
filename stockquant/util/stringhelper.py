@@ -22,8 +22,9 @@ class TaskEnum(Enum):
     季频盈利能力 = "profit"
 
     BS日线历史A股K线后复权数据 = "bs_daily_hfq"
-    BS计算指定日期往后N日涨跌幅 = "calc_later_n_pctChg"
+    BS日线历史A股K线数据 = "bs_daily"
+    BS计算指定日期往后N日涨跌幅 = "bs_calc_later_n_pctChg"
 
-    TS更新每日指标 = "daily_basic"
-    TS日线行情 = "daily"
-    TS复权因子 = "adj_factor"
+    TS更新每日指标 = "ts_daily_basic"
+    TS日线行情 = "ts_daily"
+    TS复权因子 = "ts_adj_factor"

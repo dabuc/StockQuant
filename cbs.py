@@ -1,5 +1,5 @@
 import click
-from stockquant.odl.baostock import bs_daily_hfq, bs_sz50_stocks
+from stockquant.odl.baostock import bs_daily, bs_daily_hfq, bs_sz50_stocks
 from stockquant.odl.baostock import bs_stock_basic
 
 # from coralquant.bdl.baostock import ln_pctChg
@@ -39,6 +39,18 @@ def update_daily_hfq(reset):
     bs_daily_hfq.get_daily_hfq()
 
     click.echo("BS日线后复权行情数据更新完成。")
+
+
+@cli.command()
+def update_daily():
+    """更新日线行情数据"""
+    click.confirm("正在更新BS日线行情数据，是否继续？", abort=True)
+
+    bs_daily.update_task()
+
+    bs_daily.get_daily()
+
+    click.echo("BS日线行情数据更新完成。")
 
 
 # @cli.command()

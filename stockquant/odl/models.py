@@ -36,6 +36,7 @@ class BS_Daily_Base:
     """
     BS日线历史行情数据基类
     """
+
     id = Column("id", Integer, primary_key=True)
     date = Column("date", Date, nullable=False)  # 交易所行情日期
     code = Column("code", String(10), nullable=False)  # BS证券代码 格式：sh.600000。sh：上海，sz：深圳
@@ -130,6 +131,7 @@ class BS_Daily(BS_Daily_Base, Base):
     """
     日线历史行情数据
     """
+
     __tablename__ = "odl_bs_daily"
 
 
@@ -138,6 +140,7 @@ class BS_Daily_hfq(BS_Daily_Base, Base):
     """
     后复权-日线历史行情数据
     """
+
     __tablename__ = "odl_bs_daily_hfq"
 
 
@@ -269,3 +272,17 @@ class TS_Daily(TS_Daily_Base, Base):
 #     id = Column("id", Integer, primary_key=True)
 #     股票代码 = Column("股票代码", String(10), nullable=False)  # 股票代码
 #     交易日期 = Column("交易日期", Date, nullable=False)  # 交易日期
+
+
+class TS_stk_limit(Base):
+    """
+    股票每日涨跌停价格
+    """
+
+    __tablename__ = "odl_ts_stk_limit"
+    id = Column("id", Integer, primary_key=True)
+    ts_code = Column("ts_code", String(10), nullable=False)  # TS股票代码
+    trade_date = Column("trade_date", Date, nullable=False)  # 交易日期
+    up_limit = Column("up_limit", Numeric(12, 4))  # 涨停价
+    down_limit = Column("down_limit", Numeric(12, 4))  # 跌停价
+    __table_args__ = (UniqueConstraint("ts_code", "trade_date", name="UDX_CODE_DATE"),)

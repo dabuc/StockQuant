@@ -28,3 +28,4 @@ class TaskEnum(Enum):
     TS更新每日指标 = "ts_daily_basic"
     TS日线行情 = "ts_daily"
     TS复权因子 = "ts_adj_factor"
+    TS每日涨跌停价格 = "ts_stk_limit"

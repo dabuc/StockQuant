@@ -20,6 +20,7 @@ def extract_data(
     load_data_func,
     load_data_func_params: dict,
     log_desc: str,
+    sleep_time=0.2,
 ):
     """
     抽取远端数据
@@ -59,13 +60,13 @@ def extract_data(
                         executor.submit(load_data_func, load_pramas)
 
                         task.finished = True
-                        time.sleep(0.2)
+                        time.sleep(sleep_time)
                         break
                     except Exception as e:
                         if i < (max_try - 1):
                             t = (i + 1) * 2
                             time.sleep(t)
-                            logger.error("[{}]异常重连/{}".format(task.ts_code, repr(e)))
+                            _logger.error("[{}]异常重连/{}".format(task.ts_code, repr(e)))
                             continue
                         else:
                             _logger.error("获取[{}]{}失败/{}".format(task.ts_code, log_desc, repr(e)))

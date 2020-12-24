@@ -64,7 +64,7 @@ def get_stk_limit():
     """
     pro_api = ts.pro_api(CQ_Config.TUSHARE_TOKEN)
     pro_api_func = pro_api.stk_limit  # 获取单日全部股票数据涨跌停价格
-    extract_data(TaskEnum.TS每日涨跌停价格, pro_api_func, {}, _load_data, {}, "每日涨跌停价格", sleep_time=0.8)
+    extract_data(TaskEnum.TS每日涨跌停价格, pro_api_func, {}, _load_data, {}, "每日涨跌停价格", sleep_time=0.85)
 
 
 def _load_data(dic: dict):
@@ -80,7 +80,7 @@ def _load_data(dic: dict):
         return
 
     try:
-        content["trade_date"] = pd.to_datetime(content["trade_date"], format="%Y-%m-%d")
+        content["trade_date"] = pd.to_datetime(content["trade_date"])
         content["up_limit"] = pd.to_numeric(content["up_limit"], errors="coerce")
         content["down_limit"] = pd.to_numeric(content["down_limit"], errors="coerce")
         content.to_sql(table_name, engine, if_exists="append", index=False)

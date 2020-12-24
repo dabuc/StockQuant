@@ -1,5 +1,5 @@
 import click
-from stockquant.odl.tushare import daily, ts_trade_cal, daily_basic, adj_factor, stk_limit
+from stockquant.odl.tushare import daily, ts_trade_cal, daily_basic, adj_factor, stk_limit, stock_basic
 
 
 @click.group()
@@ -56,6 +56,14 @@ def update_stk_limit():
     stk_limit.update_task()
     stk_limit.get_stk_limit()
     click.echo("每日股票涨跌停价更新完成。")
+
+
+@cli.command()
+def update_stock_basic():
+    """更新TS股票基础信息"""
+    click.confirm("正在更新TS股票基础信息，是否继续？", abort=True)
+    stock_basic.get_stock_basic()
+    click.echo("TS股票基础信息更新完成。")
 
 
 def main():

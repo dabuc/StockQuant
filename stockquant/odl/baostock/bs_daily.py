@@ -14,7 +14,7 @@ _logger = logger.Logger(__name__).get_log()
 
 def update_task():
     """
-    更新任务表
+    更新任务表-BS日线历史A股K线数据
     """
     # 删除历史任务记录
     TaskTable.del_with_task(TaskEnum.BS日线历史A股K线数据)

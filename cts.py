@@ -46,7 +46,7 @@ def update_daily_basic():
     click.confirm("正在更新每日指标，是否继续？", abort=True)
     daily_basic.update_task()
     daily_basic.update_daily_basic()
-    click.echo("每日指标更新完成。")
+    click.echo("TS每日指标更新完成。")
 
 
 @cli.command()

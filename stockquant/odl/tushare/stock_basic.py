@@ -18,7 +18,7 @@ def convert_to_bscode(ts_code):
 
 def get_stock_basic():
     """
-    获取股票列表
+    获取TS股票列表
     """
 
     # 清空原有数据

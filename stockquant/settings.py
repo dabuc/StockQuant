@@ -26,7 +26,7 @@ class DevelopmentConfig(BaseConfig):
 
     IDB_DEBUG = "1"
     DB_SCHEMA = "{}_test".format(os.getenv("DB_SCHEMA"))
-    DATABASE_URL = "{}_test".format(os.getenv("DATABASE_URL"))
+    DATABASE_URL = os.getenv("DATABASE_URL").format(DB_SCHEMA)
 
 
 class ProductionConfig(BaseConfig):
@@ -35,7 +35,7 @@ class ProductionConfig(BaseConfig):
     """
 
     DB_SCHEMA = os.getenv("DB_SCHEMA", "")
-    DATABASE_URL = os.getenv("DATABASE_URL", "")
+    DATABASE_URL = os.getenv("DATABASE_URL").format(DB_SCHEMA)
     pass
 
 

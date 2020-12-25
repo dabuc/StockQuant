@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from stockquant.util.dataconvert import convert_to_tscode, get_int_from_str
 from stockquant.odl.models import BS_Stock_Basic
 from datetime import datetime

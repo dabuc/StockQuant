@@ -1,5 +1,14 @@
 import click
-from stockquant.odl.tushare import daily, index_basic, ts_trade_cal, daily_basic, adj_factor, stk_limit, stock_basic
+from stockquant.odl.tushare import (
+    daily,
+    index_basic,
+    ts_trade_cal,
+    daily_basic,
+    adj_factor,
+    stk_limit,
+    stock_basic,
+    index_daily,
+)
 
 
 @click.group()
@@ -72,6 +81,18 @@ def update_index_basic():
     click.confirm("正在更新TS指数基础信息，是否继续？", abort=True)
     index_basic.update_index_basic()
     click.echo("TS指数基础信息更新完成。")
+
+
+@cli.command()
+@click.option("--reset", type=click.BOOL, default=False, help="是否重置任务列表，默认否")
+def update_index_daily(reset):
+    """更新TS指数日线行情"""
+    click.confirm("正在更新TS指数日线行情，是否继续？", abort=True)
+    if reset:
+        index_daily.update_task()
+        
+    index_daily.get_index_daily()
+    click.echo("TS指数日线行情更新完成。")
 
 
 def main():

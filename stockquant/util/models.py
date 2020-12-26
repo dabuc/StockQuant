@@ -17,8 +17,8 @@ class TaskTable(Base):
     id = Column(Integer, primary_key=True)
     task = Column(String(30), nullable=False)  # 任务ID
     task_name = Column(String(50), nullable=False)  # 任务
-    bs_code = Column(String(10), nullable=False)  # 证券代码 bs格式
-    ts_code = Column(String(10), nullable=False)  # 证券代码 ts格式
+    bs_code = Column(String(20), nullable=False)  # 证券代码 bs格式
+    ts_code = Column(String(20), nullable=False)  # 证券代码 ts格式
     begin_date = Column(Date, nullable=False)  # 开始时间
     end_date = Column(Date, nullable=False)  # 结束时间
     finished = Column(Boolean, default=False, nullable=False)  # 是否完成

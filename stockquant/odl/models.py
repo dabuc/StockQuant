@@ -325,7 +325,7 @@ class TS_Index_Basic(Base):
     """
 
     __tablename__ = "odl_ts_index_basic"
-    ts_code = Column("ts_code", String(20), primary_key=True)  # TS股票代码
+    ts_code = Column("ts_code", String(20), primary_key=True)  # TS指数代码
     name = Column("name", String(50), nullable=False)  # 简称
     market = Column("market", String(10), nullable=False)  # 市场
     publisher = Column("publisher", String(20))  # 发布方
@@ -333,3 +333,24 @@ class TS_Index_Basic(Base):
     base_date = Column("base_date", Date)  # 基期
     base_point = Column("base_point", Numeric(12, 4))  # 基点
     list_date = Column("list_date", Date)  # 发布日期
+
+
+class TS_Index_Daily(Base):
+    """
+    TS指数日线行情
+    """
+
+    __tablename__ = "odl_ts_index_daily"
+    id = Column("id", Integer, primary_key=True)
+    ts_code = Column("ts_code", String(20), nullable=False)  # TS指数代码
+    trade_date = Column("trade_date", Date, nullable=False)  # 交易日
+    close = Column("close", Numeric(12, 4))  # 收盘点位
+    open = Column("open", Numeric(12, 4))  # 开盘点位
+    high = Column("high", Numeric(12, 4))  # 最高点位
+    low = Column("low", Numeric(12, 4))  # 最低点位
+    pre_close = Column("pre_close", Numeric(12, 4))  # 昨日收盘点
+    change = Column("change", Numeric(12, 4))  # 涨跌点
+    pct_chg = Column("pct_chg", Numeric(12, 4))  # 涨跌幅（%）
+    vol = Column("vol", Numeric(23, 4))  # 成交量（手）
+    amount = Column("amount", Numeric(23, 4))  # 成交额（千元）
+    __table_args__ = (UniqueConstraint("ts_code", "trade_date", name="UDX_CODE_DATE"),)

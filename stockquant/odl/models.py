@@ -75,18 +75,21 @@ class BS_Weekly_Base:
     """
 
     id = Column("id", Integer, primary_key=True)
-    date = Column("date", String(10))
-    code = Column("code", String(10))
-    open = Column("open", String(15))
-    high = Column("high", String(15))
-    low = Column("low", String(15))
-    close = Column("close", String(15))
-    volume = Column("volume", String(20))
-    amount = Column("amount", String(23))
-    adjustflag = Column("adjustflag", String(1))
-    turn = Column("turn", String(15))
-    pctChg = Column("pctChg", String(15))
-    t_date = Column("t_date", Date, default=default_t_date)
+    date = Column("date", Date, nullable=False)  # 交易所行情日期
+    code = Column("code", String(10), nullable=False)  # BS证券代码 格式：sh.600000。sh：上海，sz：深圳
+    open = Column("open", Numeric(18, 4), nullable=False)  # 今开盘价格 精度：小数点后4位；单位：人民币元
+    high = Column("high", Numeric(18, 4), nullable=False)  # 最高价 精度：小数点后4位；单位：人民币元
+    low = Column("low", Numeric(18, 4), nullable=False)  # 最低价 精度：小数点后4位；单位：人民币元
+    close = Column("close", Numeric(18, 4), nullable=False)  # 今收盘价 精度：小数点后4位；单位：人民币元
+    volume = Column("volume", BigInteger)  # 成交数量 单位：股
+    amount = Column("amount", Numeric(23, 4))  # 成交金额	精度：小数点后4位；单位：人民币元
+    adjustflag = Column("adjustflag", Enum("1", "2", "3"))  # 复权状态(1：后复权， 2：前复权，3：不复权）
+    turn = Column("turn", Numeric(18, 6))  # 换手率 精度：小数点后6位；单位：%
+    pctChg = Column("pctChg", Numeric(18, 6))  # 涨跌幅（百分比）	精度：小数点后6位
+
+    @declared_attr
+    def __table_args__(cls):
+        return (UniqueConstraint("code", "date", name=f"UDX_CODE_DATE_{cls.__tablename__.upper()}"),)
 
 
 class BS_Monthly_Base:
@@ -144,6 +147,14 @@ class BS_Daily_hfq(BS_Daily_Base, Base):
     __tablename__ = "odl_bs_daily_hfq"
 
 
+class BS_Weekly_hfq(BS_Weekly_Base, Base):
+    """
+    后复权-周线历史行情数据
+    """
+
+    __tablename__ = "odl_bs_weekly_hfq"
+
+
 class BS_SZ50_Stocks(Base):
     """
     上证50
@@ -154,6 +165,26 @@ class BS_SZ50_Stocks(Base):
     updateDate = Column("updateDate", Date)
     code = Column("code", String(10))
     code_name = Column("code_name", String(10))
+
+
+class BS_Profit_Data(Base):
+    """
+    季频盈利能力
+    """
+
+    __tablename__ = "odl_bs_profit_data"
+    id = Column("id", BigInteger, primary_key=True)
+    code = Column("code", String(10))  # 证券代码
+    pubDate = Column("pubDate", String(10))  # 公司发布财报的日期
+    statDate = Column("statDate", String(10))  # 财报统计的季度的最后一天, 比如2017-03-31, 2017-06-30
+    roeAvg = Column("roeAvg", String(23))  # 净资产收益率(平均)(%)
+    npMargin = Column("npMargin", String(23))  # 销售净利率(%)
+    gpMargin = Column("gpMargin", String(23))  # 销售毛利率(%)
+    netProfit = Column("netProfit", String(23))  # 净利润(元)
+    epsTTM = Column("epsTTM", String(23))  # 每股收益
+    MBRevenue = Column("MBRevenue", String(23))  # 主营营业收入(元)
+    totalShare = Column("totalShare", String(23))  # 总股本
+    liqaShare = Column("liqaShare", String(23))  # 流通股本
 
 
 # =========================Tushare数据源模型============================

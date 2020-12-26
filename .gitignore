@@ -225,7 +225,7 @@ $RECYCLE.BIN/
 *.csv
 .flake8
 
-test.py
+test*.py
 analysis.py
 tmp.sql
 conf

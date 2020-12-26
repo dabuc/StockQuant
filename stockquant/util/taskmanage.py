@@ -11,7 +11,7 @@ from sqlalchemy import distinct
 _logger = logger.Logger(__name__).get_log()
 
 
-def create_bs_task(task: TaskEnum, tmpcodes=None):
+def create_bs_task(task: TaskEnum, tmpcodes=None, status: bool = None):
     """
     创建BS任务列表
     """
@@ -25,7 +25,8 @@ def create_bs_task(task: TaskEnum, tmpcodes=None):
                 query = query.filter(BS_Stock_Basic.code.in_(tmpcodes))
             else:
                 query = query.join(BS_SZ50_Stocks, BS_Stock_Basic.code == BS_SZ50_Stocks.code)
-        # query = query.filter(BS_Stock_Basic.status == True)  #取上市的
+        if status:
+            query = query.filter(BS_Stock_Basic.status == status)
 
         codes = query.all()
 

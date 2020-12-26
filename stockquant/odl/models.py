@@ -317,3 +317,19 @@ class TS_stk_limit(Base):
     up_limit = Column("up_limit", Numeric(12, 4))  # 涨停价
     down_limit = Column("down_limit", Numeric(12, 4))  # 跌停价
     __table_args__ = (UniqueConstraint("ts_code", "trade_date", name="UDX_CODE_DATE"),)
+
+
+class TS_Index_Basic(Base):
+    """
+    TS指数基本信息
+    """
+
+    __tablename__ = "odl_ts_index_basic"
+    ts_code = Column("ts_code", String(20), primary_key=True)  # TS股票代码
+    name = Column("name", String(50), nullable=False)  # 简称
+    market = Column("market", String(10), nullable=False)  # 市场
+    publisher = Column("publisher", String(20))  # 发布方
+    category = Column("category", String(10))  # 指数类别
+    base_date = Column("base_date", Date)  # 基期
+    base_point = Column("base_point", Numeric(12, 4))  # 基点
+    list_date = Column("list_date", Date)  # 发布日期

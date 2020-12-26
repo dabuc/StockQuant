@@ -1,5 +1,5 @@
 import click
-from stockquant.odl.tushare import daily, ts_trade_cal, daily_basic, adj_factor, stk_limit, stock_basic
+from stockquant.odl.tushare import daily, index_basic, ts_trade_cal, daily_basic, adj_factor, stk_limit, stock_basic
 
 
 @click.group()
@@ -64,6 +64,14 @@ def update_stock_basic():
     click.confirm("正在更新TS股票基础信息，是否继续？", abort=True)
     stock_basic.get_stock_basic()
     click.echo("TS股票基础信息更新完成。")
+
+
+@cli.command()
+def update_index_basic():
+    """更新TS指数基础信息"""
+    click.confirm("正在更新TS指数基础信息，是否继续？", abort=True)
+    index_basic.update_index_basic()
+    click.echo("TS指数基础信息更新完成。")
 
 
 def main():

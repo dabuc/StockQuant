@@ -20,6 +20,7 @@ class TaskEnum(Enum):
     TS复权因子 = "ts_adj_factor"
     TS每日涨跌停价格 = "ts_stk_limit"
     TS指数日线行情 = "ts_index_daily"
+    TS指数成分和权重 = "TS_Index_Weight"
 
     # -----------回测任务---------
     BS均线应用_两线法 = "two-EMA-win-rate"

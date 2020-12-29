@@ -2,6 +2,7 @@ import click
 from stockquant.odl.tushare import (
     daily,
     index_basic,
+    index_weight,
     ts_trade_cal,
     daily_basic,
     adj_factor,
@@ -90,9 +91,22 @@ def update_index_daily(reset):
     click.confirm("正在更新TS指数日线行情，是否继续？", abort=True)
     if reset:
         index_daily.update_task()
-        
+
     index_daily.get_index_daily()
     click.echo("TS指数日线行情更新完成。")
+
+
+@cli.command()
+@click.option("--reset", type=click.BOOL, default=False, help="是否重置任务列表，默认否")
+def update_index_weight(reset):
+    """
+    更新TS指数成分和权重
+    """
+    click.confirm("正在更新TS指数成分和权重，是否继续？", abort=True)
+    if reset:
+        index_weight.update_task()
+    index_weight.get_index_weight()
+    click.echo("TS指数成分和权重更新完成。")
 
 
 def main():

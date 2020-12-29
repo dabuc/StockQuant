@@ -354,3 +354,16 @@ class TS_Index_Daily(Base):
     vol = Column("vol", Numeric(23, 4))  # 成交量（手）
     amount = Column("amount", Numeric(23, 4))  # 成交额（千元）
     __table_args__ = (UniqueConstraint("ts_code", "trade_date", name="UDX_CODE_DATE"),)
+
+
+class TS_Index_Weight(Base):
+    """
+    指数成分和权重
+    """
+
+    __tablename__ = "odl_ts_index_weight"
+    id = Column("id", Integer, primary_key=True)
+    index_code = Column("index_code", String(20), nullable=False)  # 指数代码
+    con_code = Column("con_code", String(10), nullable=False)  # 成分代码
+    trade_date = Column("trade_date", Date, nullable=False)  # 交易日期
+    weight = Column("weight", Numeric(12, 4))  # 权重

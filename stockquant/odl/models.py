@@ -112,22 +112,22 @@ class BS_Monthly_Base:
     t_date = Column("t_date", Date, default=default_t_date)
 
 
-class BS_15m_Base:
+class BS_min_Base:
     """
-    5分钟线历史行情数据
+    BS分钟线历史行情数据基类
     """
 
-    id = Column("id", BigInteger, primary_key=True)
-    date = Column("date", String(10))
-    time = Column("time", String(10))
-    code = Column("code", String(10))
-    open = Column("open", String(15))
-    high = Column("high", String(15))
-    low = Column("low", String(15))
-    close = Column("close", String(15))
-    volume = Column("volume", String(20))
-    amount = Column("amount", String(23))
-    adjustflag = Column("adjustflag", String(1))
+    id = Column("id", Integer, primary_key=True)
+    date = Column("date", Date, nullable=False)  # 交易所行情日期,格式：YYYY-MM-DD
+    time = Column("time", DateTime, nullable=False)  # 交易所行情时间,格式：YYYYMMDDHHMMSSsss
+    code = Column("code", String(10), nullable=False)  # BS证券代码 格式：sh.600000。sh：上海，sz：深圳
+    open = Column("open", Numeric(18, 4), nullable=False)  # 今开盘价格 精度：小数点后4位；单位：人民币元
+    high = Column("high", Numeric(18, 4), nullable=False)  # 最高价 精度：小数点后4位；单位：人民币元
+    low = Column("low", Numeric(18, 4), nullable=False)  # 最低价 精度：小数点后4位；单位：人民币元
+    close = Column("close", Numeric(18, 4), nullable=False)  # 今收盘价 精度：小数点后4位；单位：人民币元
+    volume = Column("volume", BigInteger)  # 成交数量 单位：股
+    amount = Column("amount", Numeric(23, 4))  # 成交金额	精度：小数点后4位；单位：人民币元
+    adjustflag = Column("adjustflag", Enum("1", "2", "3"))  # 复权状态(1：后复权， 2：前复权，3：不复权）
 
 
 class BS_Daily(BS_Daily_Base, Base):
@@ -153,6 +153,14 @@ class BS_Weekly_hfq(BS_Weekly_Base, Base):
     """
 
     __tablename__ = "odl_bs_weekly_hfq"
+
+
+class BS_m60_hfq(BS_min_Base, Base):
+    """
+    后复权-60分钟线
+    """
+
+    __tablename__ = "odl_bs_m60_hfq"
 
 
 class BS_SZ50_Stocks(Base):

@@ -107,9 +107,10 @@ def query_history_k_data_plus(
     bs.logout()
 
 
-def update_task(table_model, taskEnum: TaskEnum, reset: bool = False):
+def update_task(table_model, taskEnum: TaskEnum, reset: bool = False, type: str = None):
     """
-    更新任务表：日线、周线
+    更新任务表：日线、周线、分钟线
+    :type 证券类型，其中1：股票，2：指数,3：其它。默认全部
     """
     if reset:
         create_bs_task(taskEnum)
@@ -136,6 +137,8 @@ def update_task(table_model, taskEnum: TaskEnum, reset: bool = False):
                 BS_Stock_Basic.outDate > cte.c.mx_date,
             )
         )
+        if type:
+            query = query.filter(BS_Stock_Basic.type == type)
 
         codes = query.all()
         tasklist = []

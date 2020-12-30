@@ -14,6 +14,7 @@ class TaskEnum(Enum):
     BS周线历史A股K线后复权数据 = "bs_weekly_hfq"
     BS日线历史A股K线数据 = "bs_daily"
     BS计算指定日期往后N日涨跌幅 = "bs_calc_later_n_pctChg"
+    BS60分钟K线后复权数据 = "BS_m60_hfq"
 
     TS更新每日指标 = "ts_daily_basic"
     TS日线行情 = "ts_daily"

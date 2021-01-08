@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """数据仓库管理工具"""
-from stockquant.odl.tushare import stock_basic, ts_trade_cal, daily_basic
+from stockquant.odl.tushare import stock_basic, ts_trade_cal, daily_basic, daily
 from stockquant.odl.baostock import bs_daily, bs_stock_basic
 import click
 from stockquant.util.database import engine
@@ -40,13 +40,17 @@ def update_stock_info():
     ts_trade_cal.create_cal_date()
     click.echo("交易日历更新完成")
 
-    bs_daily.update_task()
-    bs_daily.get_daily()
-    click.echo("BS日线行情数据更新完成。")
-
     daily_basic.update_task()
     daily_basic.update_daily_basic()
     click.echo("TS每日指标更新完成。")
+
+    daily.update_task()
+    daily.get_daily()
+    click.echo("TS日线行情更新完成。")
+
+    bs_daily.update_task()
+    bs_daily.get_daily()
+    click.echo("BS日线行情数据更新完成。")
 
 
 def main():
